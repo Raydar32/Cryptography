@@ -7,7 +7,7 @@
 
 import numpy as np
 from sympy import Matrix
-import math
+
 
 
 #Si definisce l'alfabeto di riferimento, in questo caso quello inglese.
@@ -161,15 +161,24 @@ def hillChipher_decrypt(text,key,BLOCK_SIZE):
 
 
 # ---------- Main ----------
-    
-MESSAGE = "iosononegron"
+
+MESSAGE = "bhjdiuptktqt"
 KEY = "gybnqkurp"    
 BLOCK_SIZE = 3
+
 print("originale:",MESSAGE)
 enc = hillChipher_encrypt(MESSAGE,KEY,BLOCK_SIZE)
 print("enc: ", enc)
 dec = hillChipher_decrypt(enc,KEY,BLOCK_SIZE)
 print("dec : ",dec)
+
+
+
+
+
+
+#attacco, costruisco un insieme di coppie plain,cypher 
+#mi servono m coppie con M lunghezza del blocco
 
 
 
