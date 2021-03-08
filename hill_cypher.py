@@ -1,13 +1,12 @@
 #   '---------------------------------------------------------------------------------------
-#   ' File      : main.cpp
+#   ' File      : hill_cypher.py
 #   ' Author    : Alessandro Mini (mat. 7060381)
-#   ' Date      : 8/11/2020
-#   ' Purpose   : Main class for both sequential and OpenMP versions of K-means.
+#   ' Date      : 07/03/2021
+#   ' Purpose   : In questo file vengono implementati i metodi del cifrario di hill.
 #   '---------------------------------------------------------------------------------------
 
 import numpy as np
 from sympy import Matrix
-
 
 
 #Si definisce l'alfabeto di riferimento, in questo caso quello inglese.
@@ -111,10 +110,6 @@ def decrypt_block(block,block_size,letters,key):
     #Si fa il reshaping della chiave in forma di matrice per poter poi
     #eseguire il prodotto K * plaintext
     key_matrix = key_matrix = np.asarray(key).reshape(block_size,block_size)
-    #Verifica della condizione di invertibilità per la matrice.
-    if(np.linalg.det(key_matrix)==0):
-        print("Errore")
-        return    
     #Si esegue l'inversione (Se possibile)
     key_matrix_inverse=get_inverse(key_matrix,letters)
     #Si vettorizza e traspone il messaggio
@@ -159,26 +154,6 @@ def hillChipher_decrypt(text,key,BLOCK_SIZE):
     return decrypted
 
 
-
-# ---------- Main ----------
-
-MESSAGE = "bhjdiuptktqt"
-KEY = "gybnqkurp"    
-BLOCK_SIZE = 3
-
-print("originale:",MESSAGE)
-enc = hillChipher_encrypt(MESSAGE,KEY,BLOCK_SIZE)
-print("enc: ", enc)
-dec = hillChipher_decrypt(enc,KEY,BLOCK_SIZE)
-print("dec : ",dec)
-
-
-
-
-
-
-#attacco, costruisco un insieme di coppie plain,cypher 
-#mi servono m coppie con M lunghezza del blocco
 
 
 
