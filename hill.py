@@ -40,8 +40,7 @@ while True:
             sys.exit(0)
             
             
-        word = preprocess_word(word,BLOCK_SIZE)
-        
+        word = preprocess_word(word,BLOCK_SIZE)        
         print("----    Avvio procedura di cifratura    ----")
         print("originale:",word)
         enc = hc.hillChipher_encrypt(word,key,BLOCK_SIZE)

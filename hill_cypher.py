@@ -64,7 +64,11 @@ def word_to_vector(message,mapfunc):
 def get_inverse(matrix, alphabet):
     alphabet_len = len(alphabet)    
     matrix = Matrix(matrix)
-    return np.matrix(matrix.inv_mod(alphabet_len))
+    try:
+        inv = np.matrix(matrix.inv_mod(alphabet_len))    
+    except:
+        raise ValueError("Matrice non invertibile")
+    return inv
 
 
 #   '---------------------------------------------------------------------------------------
@@ -110,7 +114,7 @@ def decrypt_block(block,block_size,letters,key):
     #Si fa il reshaping della chiave in forma di matrice per poter poi
     #eseguire il prodotto K * plaintext
     key_matrix = key_matrix = np.asarray(key).reshape(block_size,block_size)
-    #Si esegue l'inversione (Se possibile)
+    #Si esegue l'inversione (Se possibile)    
     key_matrix_inverse=get_inverse(key_matrix,letters)
     #Si vettorizza e traspone il messaggio
     message_vector = np.asarray(word_to_vector(block,alphabet_map)).T    
