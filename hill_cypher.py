@@ -57,19 +57,29 @@ def word_to_vector(message,mapfunc):
     return vectorized_word
 
 #   '---------------------------------------------------------------------------------------
+#   ' Metodo    : gcd
+#   ' Fine      : Metodo per trovare il massimo comun divisore usando l'algoritmo di Euclide
+#   '---------------------------------------------------------------------------------------
+def gcd(a,b):
+    c = 1
+    a,b = max(a,b),min(a,b)
+    while c != 0:
+        c = a%b
+        a,b = b,c
+    return a
+
+#   '---------------------------------------------------------------------------------------
 #   ' Metodo    : get_inverse
 #   ' Fine      : Questo metodo calcola la matrice inversa di una matrice quadrata M 
-#   '             modulo |alfabeto|.
+#   '             modulo |alfabeto|, verifica le condizioni di invertibilità mod n.
 #   '---------------------------------------------------------------------------------------
 def get_inverse(matrix, alphabet):
     alphabet_len = len(alphabet)    
     matrix = Matrix(matrix)
-    try:
-        inv = np.matrix(matrix.inv_mod(alphabet_len))    
-    except:
+    if not (matrix.det() !=0 and gcd(matrix.det(),alphabet_len)):
         raise ValueError("Matrice non invertibile")
+    inv = np.matrix(matrix.inv_mod(alphabet_len))   
     return inv
-
 
 #   '---------------------------------------------------------------------------------------
 #   ' Metodo    : encrypt_block

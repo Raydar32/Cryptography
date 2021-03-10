@@ -39,8 +39,7 @@ while True:
         
         if len(key) != pow(BLOCK_SIZE,2) or check_key(key) == False:
             print("Errore, block size e lunghezza chiave non compatibili")
-            sys.exit(0)
-            
+            sys.exit(0)           
             
         word = preprocess_word(word,BLOCK_SIZE)        
         print("----    Avvio procedura di cifratura    ----")
