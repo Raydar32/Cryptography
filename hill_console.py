@@ -1,9 +1,11 @@
-# -*- coding: utf-8 -*-
-"""
-Created on Sun Mar  7 15:11:24 2021
+#   '---------------------------------------------------------------------------------------
+#   ' File      : hill_console.py
+#   ' Author    : Alessandro Mini (mat. 7060381)
+#   ' Date      : 10/03/2021
+#   ' Purpose   : In questo file .py viene implementata la console di controllo del cifrario
+#   '             di Hill in cui è possibile cifrare/decifrare.
+#   '---------------------------------------------------------------------------------------
 
-@author: Alessandro
-"""
 
 import hill_cypher as hc
 import sys
@@ -29,14 +31,14 @@ def check_key(key):
         return True
     
 while True:   
-    choice = input("Premere 1 per cifrare/decifrare una parola\n")     
+    choice = input("Premere:\n[1] per cifrare/decifrare una parola\n[2] per uscire")     
     if(int(choice)==1):
         key = input("Inserire la chiave > ").lower()
         BLOCK_SIZE = int(input("Inserire block size > "))
         word = input("Inserire parola o frase da cifrare > ")
         
         if len(key) != pow(BLOCK_SIZE,2) or check_key(key) == False:
-            print("Errore")
+            print("Errore, block size e lunghezza chiave non compatibili")
             sys.exit(0)
             
             
@@ -45,7 +47,13 @@ while True:
         print("originale:",word)
         enc = hc.hillChipher_encrypt(word,key,BLOCK_SIZE)
         print("enc: ", enc)
-        dec = hc.hillChipher_decrypt(enc,key,BLOCK_SIZE)
-        print("dec : ",dec)
-        print("--------------------------------------------")
+        try:
+            dec = hc.hillChipher_decrypt(enc,key,BLOCK_SIZE)
+        except:
+            print("Errore: la matrice non è invertibile")
+        else:
+            print("dec : ",dec)
+            print("--------------------------------------------")
+    if (int(choice)==2):
+        sys.exit(0)
         

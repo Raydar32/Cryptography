@@ -115,7 +115,10 @@ def decrypt_block(block,block_size,letters,key):
     #eseguire il prodotto K * plaintext
     key_matrix = key_matrix = np.asarray(key).reshape(block_size,block_size)
     #Si esegue l'inversione (Se possibile)    
-    key_matrix_inverse=get_inverse(key_matrix,letters)
+    try:
+        key_matrix_inverse=get_inverse(key_matrix,letters)
+    except:
+        raise ValueError("Matrice non invertibile")
     #Si vettorizza e traspone il messaggio
     message_vector = np.asarray(word_to_vector(block,alphabet_map)).T    
     #Prodotto tra la matrice chiave invertita e chipher.
