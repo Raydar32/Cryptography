@@ -1,10 +1,3 @@
-# -*- coding: utf-8 -*-
-"""
-Created on Thu Mar 11 10:24:50 2021
-
-@author: Alessandro
-"""
-
 import string
 import sys
 
