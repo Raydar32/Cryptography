@@ -44,7 +44,14 @@ def list_GCD(my_list):
 def chunkify_string(string,blocksize):
     chunks = [string[i:i+blocksize] for i in range(0, len(string), blocksize)]
     return chunks
-    
+   
+def calculateIC(letters,word):
+    count = Counter(word)
+    k = 0
+    for i in range(1,len(letters)):
+        k = k+ (count[letters[i]])*(count[letters[i-1]])/(len(word)*len(word)-1)
+    return k
+
 def Kasisky_test(cipher_text,ngram_size): 
     print("-----  Test Kasisky  -----")
     chunks = chunkify_string(cipher_text,ngram_size)
@@ -76,10 +83,10 @@ for i in range(1,len(cipher_text)%key_len):
 chunks_2 = chunkify_string(cipher_text,int(key_len))
 #Converto la matrice in una matrice numpy poplata column-major.
 res = np.array(list(map(list, zip(*chunks_2))))
-counter = Counter(res[1])
 
-
-
+calculateIC(letters,res[0])
+    
+    
 
 
 
