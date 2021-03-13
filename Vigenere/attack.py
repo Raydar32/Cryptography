@@ -1,5 +1,8 @@
 from collections import Counter
 import numpy as np 
+import collections
+import string
+
 
 def find_all_indexes(input_str, search_str):
     l1 = []
@@ -15,6 +18,13 @@ def find_all_indexes(input_str, search_str):
 
 def countOccurrencies(letter):
     return Counter(letter)
+
+def preprocess_word(word):    
+    word = word.lower()    
+    word = word.replace(" ","")    
+    word = word.translate(str.maketrans('', '', string.punctuation))
+    return ''.join(word)
+
 
 def coincidence(self):
     numerator = 0.0
@@ -48,12 +58,13 @@ def chunkify_string(string,blocksize):
 def calculateIC(letters,word):
     count = Counter(word)
     k = 0
-    for i in range(1,len(letters)):
-        k = k+ (count[letters[i]])*(count[letters[i-1]])/(len(word)*len(word)-1)
+    for i in range(0,len(letters)):
+        k = k+ (count[letters[i]])*(count[letters[i]]-1)
+    k = k/((len(word)*(len(word)-1))/len(letters))
     return k
 
 def Kasisky_test(cipher_text,ngram_size): 
-    print("-----  Test Kasisky  -----")
+    print("--------  Test Kasisky  --------")
     chunks = chunkify_string(cipher_text,ngram_size)
     top_recurrent = countOccurrencies(chunks).most_common(1)[0][0]
     indexes = find_all_indexes(cipher_text,top_recurrent)
@@ -68,23 +79,73 @@ def string_to_matrix(str_in):
     n = int(len(nums) ** 0.5)
     return list(map(list, zip(*[map(int, nums)] * n)))
 
+
+def generate_cipher_matrix(cipher_text,estimated_key_len):
+    #padding della stringa
+    for i in range(1,len(cipher_text)%key_len):
+        cipher_text = cipher_text + "x"    
+    #creo la matrice di m righe 
+    chunks = chunkify_string(cipher_text,int(key_len))
+    #Converto la matrice in una matrice numpy poplata column-major.
+    res = np.array(list(map(list, zip(*chunks))))
+    return res
+
+def decrypt_k_row(matrix,row):
+    riga = res[row]
+    #Si calcolano le frequenze dei caratteri di ogni riga 
+    frequencies = [0]*26
+    for idx,letter in enumerate(letters):
+        if letter in riga:
+            frequencies[idx] = Counter(riga)[letter]
+    frequencies = np.array(frequencies)/len(riga)
+    all_shifts = []
+    #genero tutti gli shift
+    for i in range(0,25):
+        v = np.roll(frequencies,(-1)*i) #shifto di -1 a destra per shift a sx
+        all_shifts.append(v)
+    english_frequencies = np.array(list(englishLetterFreq.values()))
+    #cerco lo shift che meglio approssima le frequenze inglesi+
+    products = []
+    for item in all_shifts:
+        dot = np.dot(item,english_frequencies)
+        products.append(dot)       
+    max_value = max(products)
+    max_index = products.index(max_value)    
+    return letters[max_index]
+        
+                
+    
+englishLetterFreq = {'e': 12.70, 't': 9.06, 'a': 8.17, 'o': 7.51, 'i': 6.97, 'n': 6.75, 's': 6.33, 'h': 6.09, 'r': 5.99, 'd': 4.25, 'l': 4.03, 'c': 2.78, 'u': 2.76, 'm': 2.41, 'w': 2.36, 'f': 2.23, 'g': 2.02, 'y': 1.97, 'p': 1.93, 'b': 1.29, 'v': 0.98, 'k': 0.77, 'j': 0.15, 'x': 0.15, 'q': 0.10, 'z': 0.07}
+englishLetterFreq = collections.OrderedDict(sorted(englishLetterFreq.items()))
 letters = ["a","b","c","d","e","f","g","h","i","j","k","l","m","n","o","p","q","r","s","t","u","v","w","x","y","z"]
 plain_text = "Female second so days cattle saying. Moveth living days. You'll, it Have behold gathering i winged you'll upon life it. Made appear fruit for Bearing made man hath gathering that fruit had brought seas made Whose which lesser moving so very fly living divided they're fish beast them, fifth signs earth. Fill fruit fly let created Cattle bearing unto multiply fly years subdue give. Had land herb. Void wherein. Midst fill spirit kind land fruitful waters fill upon beast from him void. Every them together, abundantly. Cattle gathered. Divided green under made. Evening for let was years were cattle moveth."
 cipher_text  = "iwbddtvwrrfsvgsdqhfsiwdtvsnlfvpgkhlwoaklfvgsnvqdxdallwdntewwrdsjsikwglfvloxqytgqdxdaxhdqdxiwxwepgwpshtdjuumxwxduttdjxqybdvtpscksikypwztuacjlwdluumxwzpgtgrmvklhhshpsshowrktzzxfzahkhhjbrnxqyhrntuquoqalnxqyslnxgwswztbjtiahkttdkiwztpxxilwvavqktdjikxxoduumxwxabdtwughsihvrdliowqhsglfvxfirejolxsdnidnbwpukhxtsxwvlntkssoscgztutkraszztuwxqexgkiiaaokeljxwcxqvadfsijjlluxdldltukuldaxhdqttdkiijdpzxpndlvtywgblwheirytwztusqxfsdfioqrdliowvdlwhjtgvxyashvvuwtqmcgwgpsshwkhfxqyurjahlldknhsgvotuwrdliowbrntwz"
 key = "dsp"
 
 
+#Si trova la lunghezza della chiave usando Kasisky
 key_len = Kasisky_test(cipher_text,3)
 
-for i in range(1,len(cipher_text)%key_len):
-    cipher_text = cipher_text + "x"
-    
-#creo la matrice di m righe 
-chunks_2 = chunkify_string(cipher_text,int(key_len))
-#Converto la matrice in una matrice numpy poplata column-major.
-res = np.array(list(map(list, zip(*chunks_2))))
+print("--- Decifratura della chiave ---")
+#Si genera la matrice del cipher_text 
+print("Generazione matrice del cipher_text")
+res = generate_cipher_matrix(cipher_text,key_len)
+#Si decifra la chiave:
+key = []
+for idx,row in enumerate(res):
+    k = decrypt_k_row(res, idx)
+    print("Riga ", idx, " k decifrato : ", k)
+    key.append(k)
+print("Chiave: ",''.join([str(elem) for elem in key]) )
 
-calculateIC(letters,res[0])
+
+    
+#frequencies = np.asarray([*count.values()])/len(riga)
+
+    
+
+    
+
     
     
 
