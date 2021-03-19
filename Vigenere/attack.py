@@ -116,7 +116,7 @@ key = "dsp"
 
 
 #Si trova la lunghezza della chiave usando Kasisky
-key_len = Kasisky_test(cipher_text,3)
+key_len = Kasisky_test(cipher_text,2)
 
 print("--- Decifratura della chiave ---")
 #Si genera la matrice del cipher_text 
