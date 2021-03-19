@@ -48,7 +48,8 @@ def coincidence_index(text, m):
     return temp
 
 
-bulk_text = preprocess_input(open('text.txt', 'r').read())
+print("Esercizio 3.1")
+bulk_text = preprocess_input(open('moby.txt', 'r').read())
 a = ['a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z']
 plot_letter_frequencies(bulk_text)
 
@@ -62,9 +63,9 @@ df = pandas.DataFrame.from_dict(data, orient='index')
 df.plot(kind='bar',color="green")
 
 #Calcolo entropia
-print("Calcolo entropia")
+print("Entropia: ")
 print(entropy(bulk_text,m))
 
-
 #Calcolo l'ic
+print("\nIndice di coincidenza: ")
 print(coincidence_index(bulk_text,int(m)))

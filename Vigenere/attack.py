@@ -25,18 +25,6 @@ def preprocess_word(word):
     word = word.translate(str.maketrans('', '', string.punctuation))
     return ''.join(word)
 
-
-def coincidence(self):
-    numerator = 0.0
-    denominator = 0.0
-    for val in range(self.count(self)):
-        i = val
-        numerator += i * (i - 1)
-        denominator += i
-    if (denominator == 0.0):
-        return 0.0
-    else:
-        return numerator / ( denominator * (denominator - 1))
     
 def list_GCD(my_list):
     result = my_list[0]
@@ -54,14 +42,6 @@ def list_GCD(my_list):
 def chunkify_string(string,blocksize):
     chunks = [string[i:i+blocksize] for i in range(0, len(string), blocksize)]
     return chunks
-   
-def calculateIC(letters,word):
-    count = Counter(word)
-    k = 0
-    for i in range(0,len(letters)):
-        k = k+ (count[letters[i]])*(count[letters[i]]-1)
-    k = k/((len(word)*(len(word)-1))/len(letters))
-    return k
 
 def Kasisky_test(cipher_text,ngram_size): 
     print("--------  Test Kasisky  --------")
@@ -82,13 +62,23 @@ def string_to_matrix(str_in):
 
 def generate_cipher_matrix(cipher_text,estimated_key_len):
     #padding della stringa
-    for i in range(1,len(cipher_text)%key_len):
+    for i in range(0,estimated_key_len-(len(cipher_text)%key_len)):
         cipher_text = cipher_text + "x"    
     #creo la matrice di m righe 
-    chunks = chunkify_string(cipher_text,int(key_len))
+    chunks = chunkify_string(cipher_text,int(key_len))   
     #Converto la matrice in una matrice numpy poplata column-major.
-    res = np.array(list(map(list, zip(*chunks))))
+    res = list(map(list, zip(*chunks))) 
     return res
+
+
+def coincidence_index(text):
+    t=text
+    ngrams=countOccurrencies(t)
+    temp=0
+    for item in ngrams:
+        temp = temp +(ngrams[item]*(ngrams[item]-1))/(len(t)*((len(t)-1)))   
+    return temp
+
 
 def decrypt_k_row(matrix,row):
     riga = res[row]
@@ -118,8 +108,10 @@ def decrypt_k_row(matrix,row):
 englishLetterFreq = {'e': 12.70, 't': 9.06, 'a': 8.17, 'o': 7.51, 'i': 6.97, 'n': 6.75, 's': 6.33, 'h': 6.09, 'r': 5.99, 'd': 4.25, 'l': 4.03, 'c': 2.78, 'u': 2.76, 'm': 2.41, 'w': 2.36, 'f': 2.23, 'g': 2.02, 'y': 1.97, 'p': 1.93, 'b': 1.29, 'v': 0.98, 'k': 0.77, 'j': 0.15, 'x': 0.15, 'q': 0.10, 'z': 0.07}
 englishLetterFreq = collections.OrderedDict(sorted(englishLetterFreq.items()))
 letters = ["a","b","c","d","e","f","g","h","i","j","k","l","m","n","o","p","q","r","s","t","u","v","w","x","y","z"]
-plain_text = "Female second so days cattle saying. Moveth living days. You'll, it Have behold gathering i winged you'll upon life it. Made appear fruit for Bearing made man hath gathering that fruit had brought seas made Whose which lesser moving so very fly living divided they're fish beast them, fifth signs earth. Fill fruit fly let created Cattle bearing unto multiply fly years subdue give. Had land herb. Void wherein. Midst fill spirit kind land fruitful waters fill upon beast from him void. Every them together, abundantly. Cattle gathered. Divided green under made. Evening for let was years were cattle moveth."
-cipher_text  = "iwbddtvwrrfsvgsdqhfsiwdtvsnlfvpgkhlwoaklfvgsnvqdxdallwdntewwrdsjsikwglfvloxqytgqdxdaxhdqdxiwxwepgwpshtdjuumxwxduttdjxqybdvtpscksikypwztuacjlwdluumxwzpgtgrmvklhhshpsshowrktzzxfzahkhhjbrnxqyhrntuquoqalnxqyslnxgwswztbjtiahkttdkiwztpxxilwvavqktdjikxxoduumxwxabdtwughsihvrdliowqhsglfvxfirejolxsdnidnbwpukhxtsxwvlntkssoscgztutkraszztuwxqexgkiiaaokeljxwcxqvadfsijjlluxdldltukuldaxhdqttdkiijdpzxpndlvtywgblwheirytwztusqxfsdfioqrdliowvdlwhjtgvxyashvvuwtqmcgwgpsshwkhfxqyurjahlldknhsgvotuwrdliowbrntwz"
+
+
+cipher_text =  "EIVDMAOHSVVUPXYSAYMNAAOMWOGKHKTECDYTDRIBRPLECHWJQLBELWTCGWIJTECXBTPIGTBTBACXVFIHIRBDOGGZXYHSEEFBNDMRGQOXRWIINSMHXNOVPBXQIXYDYTDHNAROWKWLLPWYXPMPSZUXKCPHFGNBNMQARYPREDSEBLXTXVRVPOMFPXKTYKELWBRTMTJEIIEIGEGLIEKVZRWVFGAAAETHUQAXYGFZFLTRRKVNPOXQNSLDYFEFJSEAWNPHICRSHUUMZVGDXWDYIQIGEIMFFQVPFNGRXFBTTXFRVMGQTMKENAEMZIGJJNRXHFZNUEEQSIGQMYCCDALXETKVCGZLMCMTDYTTXQGFVIFNTHNUNATAMWYNCLGDRFRMMIETPRKVZRWMJUGTGBVOEABAGCKTMFEEWUSOWBMFPXJZIKETTDNTBHDILVULBDXVHVVGBRHEUUMMRTKHVQVTQDYIOYHFVWBSWABMCXYQLXSGWFRCAHLISBQYIOGLCVPOBRDVKAGTKXBVRUMLCEEIMNXPXWDYGNHJASNQUVHHBVRTQGRXQVXYMTAMANNTEGKIKAAXTAMFZGMMCPGYANAEKSSRRGHSRSDBUGYDIHRIZBNEIUTCFBRBVRUPHSAHVDMTNWTCBMMWFXQZZNAEXGSLQCVYCXSQWHMXBVRUWEGEWZENGAMQCAVPTRHRFZMXNLMWGUZACISIUWYRHUOAQTWNAEPMFEIMECHNLFCPRZEXRIGOHUGXXMEPVFBXSHNHJCZXAGIRFYLWAMBLQCKCVSEQQHNMJSLQCBLPRPIURTAMMYNJXFPTGKQHNMBVRANKMBXZYYMOMQARHWKRWIZDIPNLBFNPOXPTEJAHLYXAPHVBAYIWRXFBAFVCJVPTRHECXNAAMLSSKVXQBIJAQAEGBVRAZXFPTGKNAERTZOGUX"
+cipher_text = preprocess_word(cipher_text)
 key = "dsp"
 
 
