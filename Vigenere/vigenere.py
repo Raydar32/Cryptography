@@ -1,11 +1,18 @@
+#   '---------------------------------------------------------------------------------------
+#   ' File      : vigenere.py
+#   ' Author    : Alessandro Mini (mat. 7060381)
+#   ' Date      : 19/03/2021
+#   ' Purpose   : Metodo che implementa il cifrario di vigenere.
+#   '---------------------------------------------------------------------------------------
+
 import string
 import sys
 
 letters = ["a","b","c","d","e","f","g","h","i","j","k","l","m","n","o","p","q","r","s","t","u","v","w","x","y","z"]
 
-def preprocess_word(word):    
-    word = word.lower()    
-    word = word.replace(" ","")    
+def preprocess_word(word):
+    word = word.lower()
+    word = word.replace(" ","")
     word = word.translate(str.maketrans('', '', string.punctuation))
     return ''.join(word)
 
@@ -21,7 +28,7 @@ def repeat_string(a_string, target_length):
 def shift_sum(l1,l2,letters):
     new_char = (letters.index(l1) + letters.index(l2))%26
     return letters[new_char]
-    
+
 def shift_subtract(l1,l2,letters):
     new_char = (letters.index(l1) - letters.index(l2))%26
     return letters[new_char]
@@ -29,17 +36,17 @@ def shift_subtract(l1,l2,letters):
 def vigenere_enc(text,key):
     key = repeat_string(key,len(text))
     cipher = ""
-    for i in range(0,len(text)):     
+    for i in range(0,len(text)):
         cipher = cipher + shift_sum(text[i],key[i],letters)
     return cipher
-        
+
 def vigenere_dec(text,key):
     key = repeat_string(key,len(text))
     cipher = ""
-    for i in range(0,len(text)):     
+    for i in range(0,len(text)):
         cipher = cipher + shift_subtract(text[i],key[i],letters)
     return cipher
-        
+
 while(True):
     ch = int(input("Premere:\n[1]Per cifrare un testo\n[2]Per uscire"))
     if(ch==1):
