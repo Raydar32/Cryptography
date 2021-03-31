@@ -2,7 +2,7 @@
 #   ' File      : vigenere.py
 #   ' Author    : Alessandro Mini (mat. 7060381)
 #   ' Date      : 19/03/2021
-#   ' Purpose   : Metodo che implementa il cifrario di vigenere.
+#   ' Purpose   : File che implementa il cifrario di vigenere.
 #   '---------------------------------------------------------------------------------------
 
 import string
@@ -48,18 +48,21 @@ def vigenere_dec(text,key):
     return cipher
 
 while(True):
-    ch = int(input("Premere:\n[1]Per cifrare un testo\n[2]Per uscire"))
+    ch = int(input("Premere:\n[1]Per cifrare un testo\n[2]Per decifrare un testo\n[3]Per uscire"))
     if(ch==1):
         text = input("Inserire testo da cifrare > ")
         text = preprocess_word(text)
-        key = input("Inserire chiave (verra ripetuta) > ")
+        key = input("Inserire chiave  > ")
         key = repeat_string(key,len(text))
         enc = vigenere_enc(text,key)
         print("Cifrato :", enc)
         print("Originale: ", vigenere_dec(enc,key))
         print("Chiave : ",key)
     if(ch==2):
+        text = input("Inserire testo da decifrare > ")
+        text = preprocess_word(text)
+        key = input("Inserire chiave > ")
+        print("Originale: ", vigenere_dec(text,key))
+    if(ch==3):
         sys.exit(0)
 
-
-#'PLGTSETUU'#
