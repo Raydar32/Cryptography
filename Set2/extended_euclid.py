@@ -6,8 +6,9 @@ def EEA(a, b):
         gcd, x, y = EEA(b % a, a)
         return gcd, y - (b // a) * x, x
  
- 
-print("Algoritmo di Euclide esteso, calcolo di MCD(a,b)")
+print("----------------------------------")
+print("Algoritmo di Euclide esteso\nCalcolo di MCD(a,b)")
+print("----------------------------------")
 a = int(input("Inserire a : "))
 b = int(input("Inserire b : "))
 gcd, x, y = EEA(a, b)
