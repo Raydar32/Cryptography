@@ -19,22 +19,22 @@ def exp_norm(a, m, n):
         temp = temp * a
     return temp % n
 
+if __name__ == '__main__':
+    print("----------------------------------")
+    print("Esponenziale Veloce")
+    print("Esegue a^n mod n")
+    print("----------------------------------")
+    a = int(input("Inserire a -> "))
+    m = int(input("Inserire m -> "))
+    n = int(input("Inserire n -> "))
+    print("----------------------------------")
+    start = time.perf_counter()
+    start_time = time.time()
+    end = time.perf_counter()
+    print("[EXP.Veloce] Risultato: ", exp_veloce(a, m, n), " tempo: ", end - start, "s")
 
-print("----------------------------------")
-print("Esponenziale Veloce")
-print("Esegue a^n mod n")
-print("----------------------------------")
-a = int(input("Inserire a -> "))
-m = int(input("Inserire m -> "))
-n = int(input("Inserire n -> "))
-print("----------------------------------")
-start = time.perf_counter()
-start_time = time.time()
-end = time.perf_counter()
-print("[EXP.Veloce] Risultato: ", exp_veloce(a, m, n), " tempo: ", end - start, "s")
 
-
-start = time.perf_counter()
-start_time = time.time()
-end = time.perf_counter()
-print("[EXP.Norm]   Risultato: ", exp_norm(a, m, n), " tempo: ", end - start, "s")
+    start = time.perf_counter()
+    start_time = time.time()
+    end = time.perf_counter()
+    print("[EXP.Norm]   Risultato: ", exp_norm(a, m, n), " tempo: ", end - start, "s")
