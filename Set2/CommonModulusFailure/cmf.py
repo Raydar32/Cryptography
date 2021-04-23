@@ -16,9 +16,10 @@ e2 = 11
 
 gcd,x,y = eea.EEA(e1,e2)
 c1_inv = eea.EEA(c1,n)[1]
-q = exp.exp_veloce(c1_inv,-1*x,n) * exp.exp_veloce(c2,y,n)
-print("q recuperato: ", q)
-if(c1 == exp.exp_veloce(q,e1,n) and c2 == exp.exp_veloce(q,e2,n)):
+m = exp.exp_veloce(c1_inv,-1*x,n) * exp.exp_veloce(c2,y,n)
+
+print("m recuperato: ", m)
+if(c1 == exp.exp_veloce(m,e1,n) and c2 == exp.exp_veloce(m,e2,n)):
     print("L'operazione ha avuto successo")
 else:
     print("Operazione fallita")
