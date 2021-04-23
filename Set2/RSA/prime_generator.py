@@ -20,6 +20,6 @@ def generate_prime(bits):
         
 
     
-if __name__ == "main":
+if __name__ == "__main__":
     bits = int(input("Inserire num. bit numero da generare > "))
     print("n : ", generate_prime(bits))

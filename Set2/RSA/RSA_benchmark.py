@@ -48,7 +48,7 @@ for item in tqdm(res):
 print("Decifratura NON ottimizzata conclusa in",(time.time() - start_time),"\n")
 
 print("Esecuzione decifratura  ottimizzata")
-dp,dq,qinv = rsa_crt.keyGeneratorCRT(d,p,q)
+dp,dq,qinv = rsa_crt.generate_keys_CRT(d,p,q)
 start_time = time.time()
 for item in tqdm(res):                
     rsa_crt.rsa_decrypt(item,d,p,q,dp,dq,qinv)
