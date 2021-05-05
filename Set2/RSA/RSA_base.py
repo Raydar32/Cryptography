@@ -2,8 +2,6 @@ import prime_generator as prime
 import extended_euclid as eea
 import exp 
 
-
-
 phi_n = 0
 def generate_coprime(bits,k):
     while True:

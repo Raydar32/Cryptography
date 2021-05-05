@@ -2,7 +2,7 @@ import TimingAttackModule as t
 import random
 from tqdm import tqdm
 import numpy as np 
-import matplotlib.pyplot 
+
 ta = t.TimingAttack()
 
 
@@ -37,19 +37,27 @@ def calculateDifference(client_times,attacker_times,index):
     return diff
 
 
-tests = int(input("Inserire num. test > "))
+#10000 tests sono sufficenti a recuperare la chiave
+tests = int(input("Inserire num. caratteri da inviare alla vittima > "))
+#Inizializzo una chiave vuota
 rsa_base_key = generate_base_key()
+#Genero un array di caratteri casuali
 random_chars = generate_random_array(tests)
+#Calcolo i tempi della vittima
 client_times = np.array(get_victim_times(random_chars),dtype=np.float32)
+#Calcolo i tempi dell'attacker
 attacker_times = get_attacker_times(random_chars,rsa_base_key)
 
-
+#Per ogni bit della chiave
 for i in tqdm(range(1,len(rsa_base_key))):
+    #testo bit 0
     rsa_base_key[i] = 0
+    #calcolo tempi_vittima_originali - tempi_attacker con chiave rsa_base_key
     times_0 = client_times - np.array(get_attacker_times(random_chars,rsa_base_key),dtype=np.float32) 
+    #ripeto con bit = 1
     rsa_base_key[i] = 1
     times_1 = client_times - np.array(get_attacker_times(random_chars,rsa_base_key),dtype=np.float32) 
-    
+    #scelgo il bit sulla base della scelta che minimizza la varianza
     if np.var(times_0) < np.var(times_1):
         rsa_base_key[i] = 0
     else:

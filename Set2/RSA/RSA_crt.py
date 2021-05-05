@@ -1,10 +1,4 @@
 # -*- coding: utf-8 -*-
-"""
-Created on Wed Apr 21 16:16:56 2021
-
-@author: Alessandro
-"""
-
 import exp
 import extended_euclid as eea
 
