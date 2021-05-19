@@ -1,5 +1,5 @@
-from collections import Counter
-
+from collections import Counter  
+    
 def decode(string,code):
     r_code = {value : key for (key, value) in code.items()}
     out = ""
@@ -19,15 +19,16 @@ def encode(string,code):
     return out
         
 
-alpha = ["a","b","c","d"]
+alpha = ["a","b","c","d","e"]
 code = {
         "a" : "11",
         "b" : "10",
         "c" : "01",
-        "d" : "00"}
+        "d" : "00",}
 
-string = "abcabcabcabcabcbbcccabcabcdadadadadad"
+string = "abcabcabcabcabcbbcccabcabcdadadadadade"
 
-enc = encode(string,code)
-dec = decode(enc,code)
+#☺enc = encode(string,code)
+#dec = decode(enc,code)
 res = Counter(string)
+
