@@ -1,6 +1,9 @@
-
 from collections import Counter
 import yaml
+
+#Metodo di decodifica generico che prende in ingresso
+#una stringa (codificata) ed un codebook (dizionario) e resitituisce
+#la string decodificata
 def decode(string,code):
     r_code = {value : key for (key, value) in code.items()}
     out = ""
@@ -13,6 +16,9 @@ def decode(string,code):
     return out
 
 
+#Metodo di codifica generico che prende in ingresso
+#una stringa ed un codebook (dizionario) e restituisce
+#la stringa codificata
 def encode(string,code):
     out = ""
     for word in string:
@@ -20,6 +26,7 @@ def encode(string,code):
     return out
 
 
+#Classe nodo per costruire l'albero (binario) di codifica
 class Node:
     def __init__(self):
         self.left = None
@@ -34,7 +41,10 @@ class Node:
         print(self.left, self.right, self.value,self.frequency)
 
 
-
+#Metodo ricorsivo che prende in ingresso la radice dell'albero binario
+#e costruisce i vari percorsi per raggiungere i caratteri dell'alfabeto.
+#L'unico parametro del metodo è "root" che rappresenta la radici, gli altri
+#due sono variabili d'appoggio per la ricorsione.
 def huffman_tree(root,binString,d):
     if root.left == None or root.right==None:
         return binString
@@ -49,12 +59,13 @@ def huffman_tree(root,binString,d):
     return d
 
 
+#Metodo che prende in ingresso una stringa, costruisce l'alfabeto
+#l'albero e calcola i percorsi, restituisce il dizionario con la codifica
+#di Huffman finale.
 def huffman_buildCodebook(string):
-
     chars = Counter(string)
     nodes = []
-
-    #Converto le parole in item
+    #Converto le parole in Nodi
     for item in chars:
         newnode = Node()
         newnode.value = item
@@ -62,7 +73,8 @@ def huffman_buildCodebook(string):
         nodes.append(newnode)
 
 
-    #Costruisco l'albero
+    #Costruisco l'albero con la regola vista
+    #a lezione.
     while len(nodes) > 1:
         nodes = sorted(nodes, key=lambda x: x.frequency, reverse=False)
         n1 = nodes[0]
@@ -81,11 +93,12 @@ def huffman_buildCodebook(string):
     paths.pop("",None)
     return paths
 
-in_ = input("Inserire stringa da codificare: ")
-codebook = huffman_buildCodebook(in_)
-print(yaml.dump(codebook)) #Solo per stampare meglio
-enc = encode(in_,codebook)
-dec = decode(enc,codebook)
-
-print("Codificata: ", enc)
-print("Decodificata", dec)
+#Metodo main
+if __name__ == "__main__":
+    in_ = input("Inserire stringa da codificare: ")
+    codebook = huffman_buildCodebook(in_)
+    print(yaml.dump(codebook)) #Per stampare il dizionario formattato.
+    enc = encode(in_,codebook)
+    dec = decode(enc,codebook)    
+    print("Codificata: ", enc)
+    print("Decodificata", dec)
